@@ -10,6 +10,8 @@ int main() {
     int server_fd, new_socket, value;
     int opt = 1;
 
+    char buffer[1024] = {0};
+
     char *print = "Server erfolgreich verbunden!";
     struct sockaddr_in address;
 
@@ -47,6 +49,11 @@ int main() {
     {
         perror("Connection fehlgeschlagen...");
         exit(EXIT_FAILURE);
+    }
+
+    while(1){
+        value = read( new_socket , buffer, 1024);
+        printf("%s\n",buffer );
     }
 
     return 0;
