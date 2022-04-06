@@ -1,12 +1,11 @@
+#include "server.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/socket.h>
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
-#define PORT 1337
-#define _POSIX_C_SOURCE 2
-#define PATH_MAX 1024
+
 
 int main() {
     int server_fd, new_socket, value;
@@ -59,11 +58,14 @@ int main() {
 
     while(1){
         value = read( new_socket , buffer, 1024);
-        printf("Command: ");
-        printf("%s", buffer);
-        fp = popen(buffer, "r");
-        out = fgets(path, PATH_MAX, fp);
-        send(new_socket , out , strlen(out) , 0 );
+        printf("Received Value: %s", buffer);
+
+
+
+        send(new_socket , buffer , strlen(out) , 0 );
+
+
+
     }
 
     return 0;
