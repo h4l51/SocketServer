@@ -6,7 +6,7 @@
 #include <netinet/in.h>
 #include <string.h>
 
-int openSocket(struct sockaddr_in address, ){
+int openSocket(struct sockaddr_in address){
     int server_fd, new_socket;
     int opt = 1;
     int addrlen = sizeof(address);
@@ -43,6 +43,8 @@ int openSocket(struct sockaddr_in address, ){
         perror("Connection fehlgeschlagen...");
         exit(EXIT_FAILURE);
     }
+
+    return new_socket;
 }
 
 
@@ -56,10 +58,6 @@ int main() {
     char *answer = "Message sent to Server.";
     char *print = "Server erfolgreich verbunden!";
     struct sockaddr_in address;
-
-
-
-
     int new_socket = openSocket(address);
 
 
@@ -69,8 +67,6 @@ int main() {
     send(new_socket, answer, strlen(answer), 0);
     //Ignore sigpipe
     signal(SIGPIPE, SIG_IGN);
-
-
 
 
     return 0;
