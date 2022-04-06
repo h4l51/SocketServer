@@ -11,8 +11,9 @@
 #include <string.h>
 #include <arpa/inet.h>
 
-int connectToServer(int sock, struct sockaddr_in server_addr, char* address){
-
+int connectToServer(char* address){
+    int sock;
+    struct sockaddr_in server_addr;
 
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
@@ -46,14 +47,13 @@ int main(int argc, char const *argv[]){
         exit(1);
     }
     int sock = 0;
-    struct sockaddr_in server_addr;
     char* message = argv[2];
     char* address = argv[1];
     char buffer[1024] = {0};
 
     //Socket zum Verbinden
 
-    sock = connectToServer(sock, server_addr, address);
+    sock = connectToServer(address);
 
     send(sock, message, strlen(message), 0);
 

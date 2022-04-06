@@ -6,8 +6,9 @@
 #include <netinet/in.h>
 #include <string.h>
 
-int openSocket(struct sockaddr_in address){
+int openSocket(){
     int server_fd, new_socket;
+    struct sockaddr_in address;
     int opt = 1;
     int addrlen = sizeof(address);
 
@@ -50,15 +51,10 @@ int openSocket(struct sockaddr_in address){
 
 int main() {
     int value;
-
-    char path[PATH_MAX];
-    char *out;
-
     char buffer[1024] = {0};
     char *answer = "Message sent to Server.";
-    char *print = "Server erfolgreich verbunden!";
-    struct sockaddr_in address;
-    int new_socket = openSocket(address);
+    int new_socket;
+    new_socket = openSocket();
 
 
     value = read( new_socket , buffer, 1024);
