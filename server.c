@@ -6,20 +6,9 @@
 #include <netinet/in.h>
 #include <string.h>
 
-
-int main() {
-    int server_fd, new_socket, value;
+int openSocket(struct sockaddr_in address, ){
+    int server_fd, new_socket;
     int opt = 1;
-    FILE *fp;
-
-    char path[PATH_MAX];
-    char *out;
-
-    char buffer[1024] = {0};
-    char *answer = "Message sent to Server.";
-    char *print = "Server erfolgreich verbunden!";
-    struct sockaddr_in address;
-
     int addrlen = sizeof(address);
 
     //Socket filedescriptor erstellen
@@ -54,17 +43,33 @@ int main() {
         perror("Connection fehlgeschlagen...");
         exit(EXIT_FAILURE);
     }
+}
 
 
-    while(1){
-        value = read( new_socket , buffer, 1024);
-        printf("Received Value: %s", buffer);
+int main() {
+    int value;
 
-        send(new_socket, answer, strlen(answer), 0);
+    char path[PATH_MAX];
+    char *out;
 
-        //Ignore sigpipe
-        signal(SIGPIPE, SIG_IGN);
-    }
+    char buffer[1024] = {0};
+    char *answer = "Message sent to Server.";
+    char *print = "Server erfolgreich verbunden!";
+    struct sockaddr_in address;
+
+
+
+
+    int new_socket = openSocket(address);
+
+
+    value = read( new_socket , buffer, 1024);
+    printf("Received Value: %s", buffer);
+
+    send(new_socket, answer, strlen(answer), 0);
+    //Ignore sigpipe
+    signal(SIGPIPE, SIG_IGN);
+
 
 
 
