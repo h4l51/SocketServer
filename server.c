@@ -16,7 +16,7 @@ int main() {
     char *out;
 
     char buffer[1024] = {0};
-
+    char *answer = "Message sent to Server.";
     char *print = "Server erfolgreich verbunden!";
     struct sockaddr_in address;
 
@@ -60,13 +60,13 @@ int main() {
         value = read( new_socket , buffer, 1024);
         printf("Received Value: %s", buffer);
 
+        send(new_socket, answer, strlen(answer), 0);
 
-
-        send(new_socket , buffer , strlen(out) , 0 );
-
-
-
+        //Ignore sigpipe
+        signal(SIGPIPE, SIG_IGN);
     }
+
+
 
     return 0;
 }
