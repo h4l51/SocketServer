@@ -48,31 +48,36 @@ int openSocket(){
     return new_socket;
 }
 
+int readSocket(int socket){
+    char buffer[PATH_MAX];
+    int value;
+    value = read(socket, buffer, PATH_MAX);
+    if (value < 0){
+        perror("Error reading...");
+        return -2;
+    }
+    else if (value == 0){
+        //EOF
+        return -1;
+    }
+    else{
+        fprintf(stderr, "Received value: %s ", buffer);
+    }
+
+}
 
 int main() {
-    int value;
     int compare;
-    char buffer[PATH_MAX] = {0};
     char *answer = "Done";
     int new_socket;
     new_socket = openSocket();
 
     while(1) {
 
-
-        value = read(new_socket, buffer, PATH_MAX);
-
-        if(value != 0){
-            fprintf(stderr, "Received Value: %s\n", buffer);
-
-            send(new_socket, answer, strlen(answer), 0);
-        }
-
-
-
+        readSocket(new_socket);
 
         //Ignore sigpipe
-        //signal(SIGPIPE, SIG_IGN);
+        signal(SIGPIPE, SIG_IGN);
 
     }
     return 0;
