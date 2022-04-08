@@ -1,26 +1,15 @@
+#include "server.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/socket.h>
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
-#define PORT 1337
-#define _POSIX_C_SOURCE 2
-#define PATH_MAX 1024
 
-int main() {
-    int server_fd, new_socket, value;
-    int opt = 1;
-    FILE *fp;
-
-    char path[PATH_MAX];
-    char *out;
-
-    char buffer[1024] = {0};
-
-    char *print = "Server erfolgreich verbunden!";
+int openSocket(){
+    int server_fd, new_socket;
     struct sockaddr_in address;
-
+    int opt = 1;
     int addrlen = sizeof(address);
 
     //Socket filedescriptor erstellen
@@ -56,17 +45,35 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-
-    while(1){
-        value = read( new_socket , buffer, 1024);
-        printf("Command: ");
-        printf("%s", buffer);
-        fp = popen(buffer, "r");
-        out = fgets(path, PATH_MAX, fp);
-        send(new_socket , out , strlen(out) , 0 );
-    }
-
-    return 0;
+    return new_socket;
 }
 
 
+int main() {
+    int value;
+    int compare;
+    char buffer[PATH_MAX] = {0};
+    char *answer = "Done";
+    int new_socket;
+    new_socket = openSocket();
+
+    while(1) {
+
+
+        value = read(new_socket, buffer, PATH_MAX);
+
+        if(value != 0){
+            fprintf(stderr, "Received Value: %s\n", buffer);
+
+            send(new_socket, answer, strlen(answer), 0);
+        }
+
+
+
+
+        //Ignore sigpipe
+        //signal(SIGPIPE, SIG_IGN);
+
+    }
+    return 0;
+}
