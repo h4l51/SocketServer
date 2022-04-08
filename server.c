@@ -51,21 +51,29 @@ int openSocket(){
 
 int main() {
     int value;
-    char buffer[1024] = {0};
-    char *answer = "Message sent to Server.";
+    int compare;
+    char buffer[PATH_MAX] = {0};
+    char *answer = "Done";
     int new_socket;
     new_socket = openSocket();
 
-
-    value = read( new_socket , buffer, 1024);
-    printf("Received Value: %s", buffer);
-
-    send(new_socket, answer, strlen(answer), 0);
-    //Ignore sigpipe
-    signal(SIGPIPE, SIG_IGN);
+    while(1) {
 
 
+        value = read(new_socket, buffer, PATH_MAX);
+
+        if(value != 0){
+            fprintf(stderr, "Received Value: %s\n", buffer);
+
+            send(new_socket, answer, strlen(answer), 0);
+        }
+
+
+
+
+        //Ignore sigpipe
+        //signal(SIGPIPE, SIG_IGN);
+
+    }
     return 0;
 }
-
-
